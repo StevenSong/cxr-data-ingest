@@ -1,5 +1,12 @@
 # CXR Data Ingest
 
+## TODO
+
+* add requirements
+* rework the MIMIC-CXR section
+* add CheXpert+ section
+* add labeling details
+
 ## To prepare the dataset
 1. Download MIMIC-CXR-JPG: https://physionet.org/content/mimic-cxr-jpg/2.1.0/
     * This will take a few days if using `wget`.
