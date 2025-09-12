@@ -1,13 +1,11 @@
 # CXR Data Ingest
 
-This repository contains utilities for ingesting chest X-rays, their corresponding text reports, and preprocessing data samples for downstream modeling use. The 2 primary datasets are MIMIC-CXR and CheXpert Plus.
+This repository contains utilities for ingesting datasets of chest X-rays, their corresponding text reports, and preprocessing data samples for downstream modeling use. The 2 primary datasets are MIMIC-CXR and CheXpert Plus:
 
 * MIMIC-CXR: https://physionet.org/content/mimic-cxr-jpg/2.1.0/
 * CheXpert Plus: https://aimi.stanford.edu/datasets/chexpert-plus
 
-### TODO
-
-* add labeling details
+OpenI is a work-in-progress.
 
 ### Prerequisites
 
@@ -113,7 +111,7 @@ This makes experimentation over separate report sections difficult, as labels ma
 
 ## CheXpert Plus
 
-**NB**: while CheXpert Plus ships with labels using the updated CheXbert labeler and further provides separate labels per sections, there are subtle errors in the labels that arise from specific preprocessing steps by the CheXpert Plus authors. See this GitHub issue for more details: https://github.com/Stanford-AIMI/chexpert-plus/issues/13. As a result, we apply further custom preprocessing to address this and other issues, detailed below.
+**NB**: while CheXpert Plus ships with labels using the updated CheXbert labeler and further provides separate labels per sections, there are subtle errors in the labels that arise from specific preprocessing steps by the CheXpert Plus authors. See this GitHub issue for more details: https://github.com/Stanford-AIMI/chexpert-plus/issues/13. As a result, we apply further custom preprocessing to address this and other issues, detailed below, before ultimately applying both the CheXpert and CheXbert labelers for experimentation.
 
 Apologies this section is not as detailed with precise commands, however we outline the steps as follows:
 
@@ -137,6 +135,21 @@ Apologies this section is not as detailed with precise commands, however we outl
     * 3 new files should be created, `split.csv`, `metadata.csv`, and `report.csv`.
 
 ## Labeling
+
+Finally, we apply both CheXpert and CheXbert labelers to the extracted findings and impression sections of both MIMIC-CXR and CheXpert Plus.
+
+1. Prepare reports for labeling. Run the cells of the notebook `3_prepare_report_sections_for_labeling.ipynb`. This creates 4 separate CSV files for each dataset and each section. The dockerized CheXpert labeler expects a CSV file with a single column and no column header. We model the CheXbert labeling script to accept this same style input.
+1. Run the labelers:
+    * **CheXpert** - we use the dockerized CheXpert labeler provided by the CheXpert authors. This step will generate 4 output CSVs containing the labels for the corresponding dataset and report section.
+        ```bash
+        bash 4_run_chexpert_labeler.sh
+        ```
+    * **CheXbert** - for simplicity and consistency, we create a python wrapper utilizing the CheXbert model and utilities provided with the `f1chexbert` python package. This step will similarly generate 4 label CSVs.
+        ```bash
+        bash 4_run_chexbert_labeler.sh
+        ```
+1. Rejoin the report labels with their metadata. The labelers do not output metadata, making downstream linkage difficult. Run the cells of the notebook `5_cleanup_labeled_reports.ipynb` to rejoin the study IDs to the report labels.
+
 
 ## References
 1. `create_section_files.py` and `section_parser.py` modified from https://doi.org/10.5281/zenodo.2591653
