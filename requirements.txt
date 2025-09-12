@@ -1,0 +1,3 @@
+tqdm==4.66.4
+pandas==2.1.3
+f1chexbert==0.0.2
