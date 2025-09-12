@@ -7,7 +7,6 @@ This repository contains utilities for ingesting chest X-rays, their correspondi
 
 ### TODO
 
-* add CheXpert+ section
 * add labeling details
 
 ### Prerequisites
@@ -114,9 +113,28 @@ This makes experimentation over separate report sections difficult, as labels ma
 
 ## CheXpert Plus
 
-Apologies this section is not as detailed with precise download commands, however we outline the steps as follows:
+**NB**: while CheXpert Plus ships with labels using the updated CheXbert labeler and further provides separate labels per sections, there are subtle errors in the labels that arise from specific preprocessing steps by the CheXpert Plus authors. See this GitHub issue for more details: https://github.com/Stanford-AIMI/chexpert-plus/issues/13. As a result, we apply further custom preprocessing to address this and other issues, detailed below.
 
-1. 
+Apologies this section is not as detailed with precise commands, however we outline the steps as follows:
+
+### To prepare the dataset:
+1. Download CheXpert Plus: https://stanfordaimi.azurewebsites.net/datasets/5158c524-d3ab-4e02-96e9-6ee9efc110a1
+    * We recommend accessing this page using Google Chrome as we've observed not all browsers seem compatible.
+    * We strongly recommend using `azcopy` or other CLI tool for downloading data from Microsoft Azure. You can get a signed download link to use with `azcopy` after logging in and clicking the "Download" link under the "Export Dataset" header on the left sidebar of the page.
+
+        <details>
+        <summary>Here's a screenshot of the download page</summary>
+
+        ![Screenshot of StanfordAIMI download page](images/stanfordAIMI-download.png)
+        <details>
+    * For our purposes, we do not need the original DICOMs. Use `azcopy` flags to exlude the download of files under the DICOM path. This makes the download approximately 80% smaller!
+1. Unzip the chunked PNGs. Make sure to unzip the chunks into the same directory so that the files are extracted alongside each other. This should create a parent directory `PNG` with two subdirectories `train` and `valid`.
+1. Run the cells in `2_prepare_chexpertplus_metadata.ipynb`. This notebook does the following important preprocessing steps:
+    * Derive globally unique study IDs, as in MIMIC-CXR.
+    * Extract and deduplicate report sections.
+    * Derive new validation set and treat provided validation set as test set. Rename splits in same manner as MIMIC-CXR.
+    * We do not convert this notebook into a script to enable interactive inspection and altering for your specific needs.
+    * 3 new files should be created, `split.csv`, `metadata.csv`, and `report.csv`.
 
 ## Labeling
 
