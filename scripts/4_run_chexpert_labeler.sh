@@ -1,5 +1,6 @@
-DATA_DIR=/opt/gpudata/cxr-derived
+DATA_DIR=/opt/gpudata/cxr/derived
 
+# see: https://github.com/stanfordmlgroup/chexpert-labeler#dockerized-labeler
 docker run --rm -v "$DATA_DIR":/data chexpert-labeler:latest python label.py --reports_path /data/mimic-findings.csv --output_path /data/mimic-findings-labels-chexpert.csv --verbose
 docker run --rm -v "$DATA_DIR":/data chexpert-labeler:latest python label.py --reports_path /data/mimic-impression.csv --output_path /data/mimic-impression-labels-chexpert.csv --verbose
 docker run --rm -v "$DATA_DIR":/data chexpert-labeler:latest python label.py --reports_path /data/chexpertplus-findings.csv --output_path /data/chexpertplus-findings-labels-chexpert.csv --verbose
