@@ -123,7 +123,7 @@ Apologies this section is not as detailed with precise commands, however we outl
         <details>
         <summary>Here's a screenshot of the download page</summary>
 
-        ![Screenshot of StanfordAIMI download page](images/stanfordAIMI-download.png)
+        ![Screenshot of StanfordAIMI download page](static/stanfordAIMI-download.png)
         <details>
     * For our purposes, we do not need the original DICOMs. Use `azcopy` flags to exlude the download of files under the DICOM path. This makes the download approximately 80% smaller!
 1. Unzip the chunked PNGs. Make sure to unzip the chunks into the same directory so that the files are extracted alongside each other. This should create a parent directory `PNG` with two subdirectories `train` and `valid`.

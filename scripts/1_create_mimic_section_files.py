@@ -6,10 +6,9 @@ import os
 import sys
 from pathlib import Path
 
-from tqdm import tqdm
-
 # local folder import
 import section_parser as sp
+from tqdm import tqdm
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
